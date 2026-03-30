@@ -15,7 +15,7 @@ Pada kondisi ini, LED masih dalam keadaan lambat atau sedang, sehingga delay aka
 ### 3. Apa fungsi dari perintah `delay(timeDelay)`?
 Perintah `delay(timeDelay)` berfungsi untuk memberikan jeda waktu sesuai nilai `timeDelay`. Nilai ini menentukan cepat atau lambatnya LED berkedip, di mana semakin besar nilainya maka LED semakin lambat, dan semakin kecil nilainya maka LED semakin cepat
 ### 4. Program jika diubah alurnya menjadi mati → lambat → cepat → sedang -> mati
-Apabila program yang awal alurnya mati-> lambat -> cepat -> riset -> mati, diubah menjadi mati → lambat → cepat → sedang -> mati
+Apabila program yang awal alurnya mati-> lambat -> cepat -> riset -> mati, diubah menjadi mati → lambat → cepat → sedang -> mati <br>
 **Kode Program**
 ```cpp
 const int ledPin = 11; // pake pin 11 buat LED   
