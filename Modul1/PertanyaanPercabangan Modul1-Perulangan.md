@@ -11,7 +11,7 @@ Konfigurasi rangkaian sebagai berikut:
 | 3  | 6   | LED merah         |
 
 Gambaran rangkaian bisa dilihat pada gambar berikut:
-![Rangkaian LED](https://drive.google.com/file/d/1qDMhanZHEChQucn1PLge6qjf0LOQpCGn/view?usp=sharing)
+![Rangkaian LED](https://drive.google.com/uc?export=view&id=1qDMhanZHEChQucn1PLge6qjf0LOQpCGn)
 
 ### 2. Jelaskan bagaimana program membuat efek LED berjalan dari kiri ke kanan!
 Efek LED berjalan dari kiri ke kanan dibuat menggunakan struktur perulangan for dengan pola kenaikan nilai (increment). Program dimulai dari pin dengan nomor terkecil (misalnya pin 6) hingga pin terbesar (misalnya pin 9).
