@@ -73,7 +73,7 @@ void loop() {
 
 #### 4. Lengkapi table berikut berdasarkan pengamatan pada Serial Monitor
 | ADC | Volt (V) | Persen (%) |
-|-----|----------|------------|
+|:---:|:--------:|:----------:|
 | 1   | 0.00     | 0%         |
 | 21  | 0.10     | 2%         |
 | 49  | 0.24     | 5%         |
