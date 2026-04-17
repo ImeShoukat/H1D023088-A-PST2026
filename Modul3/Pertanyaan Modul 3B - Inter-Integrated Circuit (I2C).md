@@ -74,7 +74,7 @@ void loop() {
 #### 4. Lengkapi table berikut berdasarkan pengamatan pada Serial Monitor
 - Volt = ADC*(5/1023)
 - Persen = ADC/1023*100
-sehingga tabel apabila dilengkapi:
+sehingga tabel apabila dilengkapi:<br>
 | ADC | Volt (V) | Persen (%) |
 |:---:|:--------:|:----------:|
 | 1   | 0.00     | 0%         |
