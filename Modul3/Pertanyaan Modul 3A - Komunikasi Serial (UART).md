@@ -2,7 +2,7 @@
 ## 3.5.4 Jawaban Pertanyaan Praktikum 
 ---
 #### 1. Jelaskan proses dari input keyboard hingga LED menyala/mati!
-- Ketika user mengetikan `'`1'` atau `'0'` pada serial monitor, data akan dikirimkan ke Arduino melalui komunikasi serial UART melalui kabel USB.
+- Ketika user mengetikan `'1'` atau `'0'` pada serial monitor, data akan dikirimkan ke Arduino melalui komunikasi serial UART melalui kabel USB.
 - Arduino kemudian menerima data tersebut dan menyimpannya sementara di dalam buffer serial.
 - Program Arduino akan terus mengecek apakah ada data yang masuk menggunakan fungsi `Serial.available()`. Jika ada data, maka Arduino akan membaca data tersebut menggunakan `Serial.read()`.
 - Data yang diterima akan dibandingkan. Apabila data yang masuk bernilai `'1'`, maka Arduino akan memberi sinyal HIGH ke pin LED. Namun, apabila data yang diterima bernilai `'0'`, maka Arduino akan memberikan sinyal LOW ke pin LED sehingga LED mati.
