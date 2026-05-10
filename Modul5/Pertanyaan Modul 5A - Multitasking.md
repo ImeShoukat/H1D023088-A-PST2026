@@ -18,12 +18,7 @@ void TaskBlink4(void *pvParameters) {
 - Tambah xTaskCreate() pada fungsi setup():
 ```cpp
 xTaskCreate(
-  Task4,
-  "task4",
-  128,
-  NULL,
-  1,
-  NULL
+  Task4, "task4", 128, NULL, 1, NULL
 );
 ```
 - Atur isi task sesuaii kebutuhan, misalnya menyalakan LED lain
@@ -43,7 +38,7 @@ void TaskBlink4(void *pvParameters) {
 #### 3. Modifikasilah program dengan menambah sensor (misalnya potensiometer), lalu gunakan nilainya untuk mengontrol kecepatan LED! Bagaimana hasilnya? Jelaskan program pada file README.md.
 Program dimodifikasi dengan menambahkan potensiometer pada pin analog A0. Nilai potensiometer dibaca menggunakan analogRead(), kemudian digunakan untuk mengatur delay kedipan LED. Semakin besar nilai potensiometer, maka delay LED semakin lama sehingga LED berkedip lebih lambat. Sebaliknya, jika nilai potensiometer kecil maka LED akan berkedip lebih cepat.
 
-Wiring diagram:
+Wiring diagram:  
 ![Wiring Diagram](image.png)
 
 Kode:
