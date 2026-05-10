@@ -13,11 +13,13 @@ Karena kedua task tidak mengakses variabel global secara langsung pada waktu yan
 
 #### 3. Modifikasilah program dengan menggunakan sensor DHT sesungguhnya sehingga informasi yang ditampilkan dinamis. Bagaimana hasilnya? Jelaskan program pada file README.md.
 Program dimodifikasi dengan menambahkan sensor DHT22 untuk membaca data temperatur dan kelembaban secara realtime. Sensor dihubungkan ke mikrokontroler menggunakan pin data digital sehingga nilai temperatur dan humidity dapat berubah secara dinamis sesuai kondisi sensor.  
-Implementasi awal, simulasi menggunakan Arduino dan FreeRTOS di wokwi dengan schema diagram seperti berikut:
+Implementasi awal, simulasi menggunakan Arduino dan FreeRTOS di wokwi dengan wiring diagram seperti berikut:
 ![DHT Arduino](image-1.png)  
 Namun, terdapat kendala pada pembacaam sensor DHT di Wokwi. Hal ini menyebabkan data pada serial monitor tidak dapat tampil dengan baik karena keterbatasan kompatibilitas simulator terhadap penggunaan FreeRTOS dan library DHT secara bersamaan pada Arduino Uno.  
-Untuk mengatasi masalah tersebut, simulasi dipindahkan menggunakan ESP32. Program pada ESP32 menggunakan konsep dan mekanisme yang sama dengan Arduino Uno, yaitu multitasking menggunakan FreeRTOS dan komunikasi task menggunakan queue. Perbedaan utama terletak pada platform yang digunakan, dimana ESP32 memiliki dukungan FreeRTOS bawaan dan kapasitas memori yang lebih besar sehingga pembacaan sensor DHT dapat berjalan lebih stabil.  
-Berikut kode program untuk implementasi penggunaan sensor DHT:
+Untuk mengatasi masalah tersebut, simulasi dipindahkan menggunakan ESP32. Program pada ESP32 menggunakan konsep dan mekanisme yang sama dengan Arduino Uno, yaitu multitasking menggunakan FreeRTOS dan komunikasi task menggunakan queue. Perbedaan utama terletak pada platform yang digunakan, dimana ESP32 memiliki dukungan FreeRTOS bawaan dan kapasitas memori yang lebih besar sehingga pembacaan sensor DHT dapat berjalan lebih stabil. Untuk wiring diagram menggunakan ESP sebagai berikut:
+![Wiring Diagram DHT ESP32](image-2.png)
+  
+Untuk simulasi dapat dilakukan pada link berikut: [Simulasi Wokwi 5B](https://wokwi.com/projects/463597607004493825). Berikut kode program untuk implementasi penggunaan sensor DHT:
 ```cpp
 #include <Arduino.h>
 #include <DHT.h>
@@ -135,11 +137,19 @@ void setup() {]
   Serial.println("Task berhasil dibuat");
 }
 ```
-Fungsi setup ini dijalankan satu kali saat ESP32 mulai aktif. Pada fungsi setup, dilakukan ... (lanjutin bg) 
+Fungsi setup ini dijalankan satu kali saat ESP32 mulai aktif. Pada fungsi setup, dilakukan inisialisasi komunikasi serial, inisialisasi sensor DHT22, pembuatan queue, serta pembuatan task pada FreeRTOS.  
+- `Serial.begin(115200)` digunakan untuk memulai komunikasi serial dengan baud rate 115200 agar data dapat ditampilkan pada Serial Monitor. Selanjutnya `dht.begin()` digunakan untuk mengaktifkan sensor DHT22 sehingga sensor siap membaca data temperatur dan kelembaban.  
+- Program kemudian menampilkan tulisan "Program Started" sebagai indikator bahwa program telah mulai berjalan. Setelah itu dibuat queue menggunakan `xQueueCreate(5, sizeof(struct readings))` yang berfungsi sebagai media komunikasi antar task. Queue memiliki kapasitas 5 data dengan ukuran data sesuai struct readings.  
+- Selanjutnya dilakukan pengecekan apakah queue berhasil dibuat atau tidak menggunakan kondisi `if (my_queue == NULL)`. Jika queue gagal dibuat maka Serial Monitor akan menampilkan pesan "Queue gagal dibuat!", sedangkan jika berhasil maka akan muncul pesan "Queue berhasil dibuat".  
+- Setelah queue berhasil dibuat, program membuat dua task menggunakan xTaskCreate(), yaitu task read_data untuk membaca data sensor dan task display_data untuk menampilkan data ke Serial Monitor. Kedua task dijalankan secara multitasking menggunakan FreeRTOS.  
+- Terakhir, program menampilkan pesan "Task berhasil dibuat" sebagai tanda bahwa seluruh task telah berhasil dijalankan.
+
 7. Fungsi loop()
 ```cpp
 void loop(){}
 ```
+Fungsi loop() dikosongkan karena seluruh proses sudah dijalankan menggunakan FreeRTOS task.
+
 8. Fungsi read_data()
 ```cpp
 void read_data(void *pvParameters) {
@@ -155,6 +165,12 @@ void read_data(void *pvParameters) {
   }
 }
 ```
+Fungsi read_data() merupakan task yang digunakan untuk membaca data dari sensor DHT22. 
+- Pada awal fungsi dibuat variabel data bertipe struct readings yang digunakan untuk menyimpan nilai temperatur dan kelembaban.
+- Di dalam loop `for(;;)`, program membaca temperatur menggunakan `dht.readTemperature()` dan membaca kelembaban menggunakan `dht.readHumidity()`. Hasil pembacaan kemudian disimpan ke dalam variabel `data.temp` dan `data.hum`.
+- Selanjutnya program melakukan pengecekan menggunakan `if (!isnan(data.temp) && !isnan(data.hum))` untuk memastikan data sensor valid dan bukan `NaN` (Not a Number). Jika data valid, maka data akan dikirim ke queue menggunakan `xQueueSend(my_queue, &data, portMAX_DELAY)` agar dapat diterima oleh task lain.
+- Terakhir, task diberi delay selama 2 detik menggunakan `vTaskDelay(2000 / portTICK_PERIOD_MS)` sebelum melakukan pembacaan sensor kembali.
+
 9. Fungsi display_data()
 ```cpp
 void display_data(void *pvParameters) {
@@ -172,3 +188,8 @@ void display_data(void *pvParameters) {
   }
 }
 ```
+Fungsi `display_data()` merupakan task yang digunakan untuk menerima data dari queue dan menampilkannya pada serial monitor. 
+- Variabel data bertipe struct readings digunakan untuk menyimpan data yang diterima dari queue.
+- Di dalam loop `for(;;)`, task menunggu data masuk menggunakan `xQueueReceive(my_queue, &data, portMAX_DELAY)`. Parameter `portMAX_DELAY` membuat task menunggu hingga data tersedia di queue.
+- Jika data berhasil diterima `(pdPASS)`, maka nilai temperatur dan kelembaban akan ditampilkan pada serial monitor menggunakan `Serial.print()` dan `Serial.println()`. Program juga menampilkan garis pemisah agar hasil output lebih rapi dan mudah dibaca.
+- Task ini bekerja sebagai consumer yang menerima data dari task `read_data()` melalui queue sehingga komunikasi antar task dapat berjalan dengan aman dan teratur.
