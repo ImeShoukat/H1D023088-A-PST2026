@@ -91,6 +91,7 @@ Program bekerjada dengan 2 task utama, yaitu `read_data()` untuk membaca data da
 ```
 Arduino.h digunakan untuk mengakses fungsi dasar Arduino seperti pinMode(), digitalWrite(), Serial, dan fungsi lainnya.
 DHT.h digunakan untuk mengakses sensor DHT22 agar dapat membaca data temperatur dan kelembaban.  
+
 2. Konfigurasi DHT
 ```cpp
 #define DHTPIN 4
@@ -98,7 +99,8 @@ DHT.h digunakan untuk mengakses sensor DHT22 agar dapat membaca data temperatur 
 
 DHT dht(DHTPIN, DHTTYPE);
 ```
-DHTPIN menentukan pin data sensor DHT yang digunakan, yaitu GPIO 4 pada ESP32. DHTTYPE menentukan jenis sensor yang digunakan, yaitu DHT22. Kemudian DHT dideklarasikan sebagai objek dengan nama dht menggunakan pin dan tipe sensor yang telah ditentukan.
+DHTPIN menentukan pin data sensor DHT yang digunakan, yaitu GPIO 4 pada ESP32. DHTTYPE menentukan jenis sensor yang digunakan, yaitu DHT22. Kemudian DHT dideklarasikan sebagai objek dengan nama dht menggunakan pin dan tipe sensor yang telah ditentukan.  
+
 3. Struct Data
 ```cpp
 struct readings {
@@ -106,18 +108,21 @@ struct readings {
   float hum;
 };
 ```
-Struct readings digunakan untuk menyimpan dua data sensor sekaligus, yaitu temp untuk temperatur dan hum untuk kelembaban. Tipe data float digunakan karena hasil pembacaan sensor berupa bilangan desimal.
+Struct readings digunakan untuk menyimpan dua data sensor sekaligus, yaitu temp untuk temperatur dan hum untuk kelembaban. Tipe data float digunakan karena hasil pembacaan sensor berupa bilangan desimal.  
+
 4. Queue
 ```cpp
 QueueHandle_t my_queue;
 ```
-Mendeklarasikan queue FreeRTOS bernama my_queue yang digunakan sebagai media komunikasi antar task.
+Mendeklarasikan queue FreeRTOS bernama my_queue yang digunakan sebagai media komunikasi antar task.  
+
 5. Fungsi Prototype
 ```cpp
 void read_data(void *pvParameters);
 void display_data(void *pvParameters);
 ```
-Membuat prototipe fungsi task agar fungsi dapat dipanggil sebelum didefinisikan.
+Membuat prototipe fungsi task agar fungsi dapat dipanggil sebelum didefinisikan.  
+
 6. Fungsi setup()
 ```cpp
 void setup() {]
