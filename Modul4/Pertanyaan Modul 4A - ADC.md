@@ -8,7 +8,7 @@ Perintah `analogRead()` berfungsi untuk membaca nilai tegangan analog dari poten
 Fungsi map() digunakan untuk mengonversi nilai dari satu rentang ke rentang lain secara linier. Dalam percobaan 1, nilai ADC yang berada pada rentang 0–1023 tidak dapat langsung digunakan untuk mengontrol perangkat output seperti servo. Oleh karena itu, diperlukan fungsi map() untuk mengubah nilai ADC (0-1023) menjadi sudut servo (0-180 derajat).
  
 
-#### 3. Modifikasi program berikut agar servo hanya bergerak dalam rentang 30° hingga 150°, meskipun potensiometer tetap memiliki rentang ADC 0–1023. Jelaskan program pada file README.md
+#### 3. Modifikasi program berikut agar servo hanya bergerak dalam rentang 30° hingga 150°, meskipun potensiometer tetap memiliki rentang ADC 0–1023. Jelaskan program pada file R EADME.md
 Bagian yang cukup dimodifikasi adalah pada bagian mapping di fungsi loop, menjadi:
 ```cpp
 void loop() {
